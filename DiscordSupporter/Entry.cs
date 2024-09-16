@@ -19,9 +19,9 @@ namespace DiscordSupporter
 
         public Entry()
         {
-            //var configData = FileReader.ReadFile("./config.json");
-            //_config = JsonConvert.DeserializeObject<Config>(configData);
+            var configData = FileReader.ReadFile("./config.json");
             _config = new Config();
+            _config = JsonConvert.DeserializeObject<Config>(configData);
 
             Client = new DiscordSocketClient(new DiscordSocketConfig
             {
