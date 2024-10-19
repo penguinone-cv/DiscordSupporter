@@ -16,6 +16,7 @@ namespace DiscordSupporter
         private MessageAnalyzer Analyzer { get; }
         private MessageSender Sender { get; }
         private RoleAssigner RoleAssigner { get; }
+        private SlashCommand SlashCommand { get; }
 
         public Entry()
         {
@@ -36,6 +37,7 @@ namespace DiscordSupporter
             Analyzer = new MessageAnalyzer(Client);
             Sender = new MessageSender(Client);
             RoleAssigner = new RoleAssigner(Client);
+            SlashCommand = new SlashCommand(Client, _config.GuildId);
         }
 
         public static void Main() => new Entry().MainAsync().GetAwaiter().GetResult();
@@ -56,6 +58,7 @@ namespace DiscordSupporter
 
         private async Task ClientReadyAsync()
         {
+            SlashCommand.CreateAllCommands();
             Console.WriteLine($"{Client.CurrentUser} is connected.");
         }
     }

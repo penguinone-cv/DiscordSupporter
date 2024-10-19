@@ -69,8 +69,8 @@ namespace DiscordSupporter
         {
             var content = message.Content;
             bool isCollectMessage = content.Contains("募集");
-            bool isNotMentioned = message.MentionedChannels.Count == 0 && !message.MentionedEveryone && message.MentionedRoles.Count == 0 && message.MentionedUsers.Count == 0;
-            bool isAtMessage = isNotMentioned && Regex.IsMatch(content, "@[0-9]");
+            bool isMentioned = message.MentionedChannels.Count > 0 || message.MentionedEveryone || message.MentionedRoles.Count > 0 || message.MentionedUsers.Count > 0;
+            bool isAtMessage = !isMentioned && Regex.IsMatch(content, "@[0-9]");
             return isCollectMessage || isAtMessage;
         }
 

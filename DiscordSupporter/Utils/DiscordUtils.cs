@@ -10,5 +10,9 @@ namespace DiscordSupporter.Utils
 {
     public static class DiscordUtils
     {
+        public static bool IsEmpty(this string txt)
+        {
+            return string.IsNullOrEmpty(txt) || string.IsNullOrWhiteSpace(txt);
+        }
     }
 }
