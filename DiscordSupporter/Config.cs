@@ -18,5 +18,8 @@ namespace DiscordSupporter
         /// </summary>
         [JsonProperty("GuildId")]
         public ulong GuildId { get; set; } = 0;
+
+        [JsonProperty("OpenAIToken")]
+        public string OpenAIToken { get; set; } = "Dummy_Token";
     }
 }
