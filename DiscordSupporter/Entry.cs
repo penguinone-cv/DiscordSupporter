@@ -17,7 +17,7 @@ namespace DiscordSupporter
         private MessageSender Sender { get; }
         private RoleAssigner RoleAssigner { get; }
         private SlashCommand SlashCommand { get; }
-        internal OpenAI.Chat.ChatClient ChatGPTClient { get; }
+        internal ChatBot ChatBot { get; }
 
         public Entry()
         {
@@ -35,8 +35,9 @@ namespace DiscordSupporter
             Client.MessageReceived += MessageReceived;
             Client.ReactionAdded += ReactionAdded;
 
-            ChatGPTClient = new OpenAI.Chat.ChatClient("gpt-4o-mini", _config.OpenAIToken);
-            Analyzer = new MessageAnalyzer(Client, ChatGPTClient);
+            var chatGPTClient = new OpenAI.Chat.ChatClient("gpt-4o-mini", _config.OpenAIToken);
+            ChatBot = new ChatBot(chatGPTClient, _config.RAGDataPath);
+            Analyzer = new MessageAnalyzer(Client, ChatBot);
             Sender = new MessageSender(Client);
             RoleAssigner = new RoleAssigner(Client);
             SlashCommand = new SlashCommand(Client, _config.GuildId);

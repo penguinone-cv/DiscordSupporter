@@ -48,12 +48,12 @@ namespace DiscordSupporter
     public class MessageAnalyzer
     {
         private readonly DiscordSocketClient _client;
-        private readonly ChatClient _chat;
+        private readonly ChatBot _chat;
 
-        public MessageAnalyzer(DiscordSocketClient client, ChatClient chatClient)
+        public MessageAnalyzer(DiscordSocketClient client, ChatBot chatBot)
         {
             _client = client;
-            _chat = chatClient;
+            _chat = chatBot;
         }
 
         public bool IsOwnMessage(SocketMessage message)
@@ -75,13 +75,12 @@ namespace DiscordSupporter
             // ChatGPTくんに聞いてみよう
             // System Prompt & Few-shot
             var systemTxt = "あなたは、「提示されたメッセージがメンバーを募集するメッセージであるか」を判断するスペシャリストです。"
-                          + "始めに理由を述べ、最後に判断を「Yes」か「No」で答えてください。"
-                          + "例えば、「21- @2」というメッセージの場合、「21-」が21時から、「@2」が残り募集人数が2人であることを表すため、21時から2人を募集するメッセージと解釈でき、「Yes」です。"
-                          + "また、「soloってます。」というメッセージの場合、一人でゲームをしており、誰か暇な人がいれば一緒にやりたいことを暗に示しているため、「Yes」です。"
-                          + "一方で、「(エペ募集の方に僕入ってますが工場は開けれるのでご心配なく)」というメッセージは「募集」という言葉は入っていますが、メッセージの主題は募集することではなく「工場が開けられること」にあるため、「No」です。\n";
+                          + "始めに理由を述べ、最後に判断を「Yes」か「No」で答えてください。\n";
             var askTxt = $"以下のメッセージの場合はどうなりますか？\n"
                        + $"{content}";
-            var result = await _chat.CompleteChatAsync(systemTxt+askTxt);
+            var ragTxt = $"以下にメッセージと判断理由、結果のデータをCSV形式で入れるので、判断の参考にしてください。"
+                       + $"{_chat.GetRAGData()}";
+            var result = await _chat.Client.CompleteChatAsync(systemTxt+askTxt);
             if (result.Value.Content[0].Text.Contains("Yes"))
             {
                 Console.WriteLine($"ChatGPTによる推論が利用されました。Model：{result.Value.Model}");

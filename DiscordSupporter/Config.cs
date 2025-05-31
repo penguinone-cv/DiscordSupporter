@@ -21,5 +21,8 @@ namespace DiscordSupporter
 
         [JsonProperty("OpenAIToken")]
         public string OpenAIToken { get; set; } = "Dummy_Token";
+
+        [JsonProperty("RAGDataPath")]
+        public string RAGDataPath { get; set; } = "./RAGData.csv";
     }
 }
